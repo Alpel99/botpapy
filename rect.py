@@ -1,4 +1,4 @@
-from botpapy.helpers import parseCoordinates
+from .helpers import parseCoordinates
 
 class Rect():
     def __init__(self, *args):

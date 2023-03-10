@@ -1,4 +1,4 @@
-from botpapy.rect import Rect
+from .rect import Rect
 
 class Match():
     def __init__(self, rect: Rect, score):

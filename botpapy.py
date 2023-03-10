@@ -8,15 +8,15 @@ import win32api, win32con
 from PIL import Image as PILImage
 from ctypes import windll
 import time
-from botpapy.helpers import parseCoordinates, is_hex, MAKELONG
-from botpapy.config import CLICK_TIMEOUT, SYNC_MSG
+from .helpers import parseCoordinates, is_hex, MAKELONG
+from .config import CLICK_TIMEOUT, SYNC_MSG
 
-from botpapy.crangeTester import crangeTest
-from botpapy.color import Color
-from botpapy.rect import Rect
-from botpapy.match import Match
-from botpapy.image import Image
-from botpapy.selectWindow import checkWindowNames, listWindows
+from .crangeTester import crangeTest
+from .color import Color
+from .rect import Rect
+from .match import Match
+from .image import Image
+from .selectWindow import checkWindowNames, listWindows
 
 class Window():
     def __init__(self, name, layer = 1):
@@ -65,8 +65,6 @@ class Window():
         if result != 1:
             print("Screenshot not successful.")
             return None
-            #PrintWindow Succeeded
-            # img.save("test.png")
             
         return Image(cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR))
             
@@ -86,13 +84,13 @@ class Window():
                 raise Exception("Couldn't parse mouse button, use 'left', 'right' or 'middle'", args)
 
         if not SYNC_MSG:
-            win32gui.PostMessage(self.hwnd,win32buttondown, win32con.MK_LBUTTON,MAKELONG(x,y))
+            win32gui.PostMessage(self.hwnd,win32buttondown, 0, MAKELONG(x,y)) #win32con.MK_LBUTTON
             time.sleep(CLICK_TIMEOUT)
-            win32gui.PostMessage(self.hwnd,win32buttonup, 0,MAKELONG(x,y))
+            win32gui.PostMessage(self.hwnd,win32buttonup, 0, MAKELONG(x,y))
         else:
-            win32gui.SendMessage(self.hwnd,win32buttondown, win32con.MK_LBUTTON,MAKELONG(x,y))
-            time.sleep(0.05)
-            win32gui.SendMessage(self.hwnd,win32buttonup, 0,MAKELONG(x,y))
+            win32gui.SendMessage(self.hwnd,win32buttondown, 0, MAKELONG(x,y))
+            time.sleep(CLICK_TIMEOUT)
+            win32gui.SendMessage(self.hwnd,win32buttonup, 0, MAKELONG(x,y))
         
     def click(self, tpl, trsh):
         matches = findMatches(self.takeScreenshot(), tpl, trsh, 1)
@@ -102,7 +100,7 @@ class Window():
         self.mouseClick(matches[0].center)
         
     def moveMouse(self, *args):
-        x,y = parseCoordinates(args)
+        x,y, other = parseCoordinates(args)
         # WM_MOUSEHOVER, WM_MOUSEMOVE
         if not SYNC_MSG:
             win32gui.PostMessage(self.hwnd,win32con.WM_MOUSEMOVE, 0, MAKELONG(x,y))
@@ -132,7 +130,7 @@ class Window():
 
     def holdButton(self, c: str, time):
         # is blocking -> this bad?
-        if len(c) > 1:
+        if len(c) != 1:
             raise Exception("Only can hold one button.", c)
         c = win32api.VkKeyScan(c)
         win32api.SendMessage(self.hwnd, win32con.WM_KEYDOWN, c, 0)

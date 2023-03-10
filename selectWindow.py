@@ -118,7 +118,7 @@ def selectWindow(windows: dict):
 def checkWindowNames(name: str, layer = 1):
     handles = []
     def enumHandler(hwnd, ctx):
-        if win32gui.GetWindowText(hwnd) == name:
+        if name in win32gui.GetWindowText(hwnd):
             handles.append(hwnd)
     win32gui.EnumWindows(enumHandler, None)
     if len(handles) == 0:

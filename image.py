@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from botpapy.color import Color
-from botpapy.rect import Rect
-from botpapy.helpers import parseCoordinates
+from .color import Color
+from .rect import Rect
+from .helpers import parseCoordinates
 
 class Image():
     def __init__(self, src):
@@ -14,7 +14,7 @@ class Image():
             self.img = src.img.copy()
         assert(isinstance(self.img,np.ndarray)), "Something went wrong at Image initialization. Use other Image, ndarray or path as string"
         
-    def save(self, name):
+    def save(self, name:str):
         cv2.imwrite(name, self.img)
         
     def getSize(self):
@@ -46,8 +46,12 @@ class Image():
         cv2.imshow('Botpapy image',self.img)
         cv2.moveWindow('Botpapy image', 40,30)
         cv2.waitKey(0)
+        try:
+            cv2.destroyWindow('Botpapy image')
+        except:
+            pass
         
-    def isolateColorRange(self, c1 : Color, c2 : Color):
+    def isolateColorRange(self, c1: Color, c2: Color, keep_color = False):
         if not c1.hsv or not c2.hsv:
             print("Use of HSV colors recommended, use crangeTester!")
         img_hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
@@ -55,4 +59,9 @@ class Image():
         for i, cs in enumerate(zip(c1.hsv, c2.hsv)):
             cmin[i] = min(cs[0], cs[1])
             cmax[i] = max(cs[0], cs[1])
-        self.img = cv2.inRange(img_hsv, cmin, cmax)
+        if not keep_color:
+            self.img = cv2.inRange(img_hsv, cmin, cmax)
+        else:
+            mask = cv2.inRange(img_hsv, cmin, cmax)
+            self.img = cv2.bitwise_and(self.img, self.img, mask = mask)
+        

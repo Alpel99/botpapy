@@ -18,6 +18,8 @@ class Color():
                 self.g = 0
                 self.b = 0
                 match args[0]:
+                    case "black":
+                        pass
                     case "red":
                         self.r = 255
                     case "blue":
@@ -32,7 +34,7 @@ class Color():
             self.r, self.g, self.b = args
         else:
             raise Exception("Couldn't create color, use 3 ints.", args)
-        self.h, self.s, self.v = cv2.cvtColor(np.uint8([[self.rgb]]), cv2.COLOR_RGB2HSV)[0][0]
+            self.h, self.s, self.v = cv2.cvtColor(np.uint8([[self.rgb]]), cv2.COLOR_RGB2HSV)[0][0]
                     
     def getRGB(self):
         return (self.r, self.g, self.b)
