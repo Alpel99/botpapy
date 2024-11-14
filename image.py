@@ -25,12 +25,12 @@ class Image():
         return self.img.shape[0:2][::-1]
 
     def getPixelColor(self, *args):
-        x,y, others = parseCoordinates(args)
+        (x,y), others = parseCoordinates(args)
         b,g,r = (self.img[y,x])
         return Color(r,g,b)
     
     def setPixelColor(self, *args):
-        x,y, others = parseCoordinates(args)
+        (x,y), others = parseCoordinates(args)
         if isinstance(others[0], Color):
             self.img[y,x] = others[0].bgr
         else:

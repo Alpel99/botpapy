@@ -23,3 +23,6 @@ def is_hex(s):
 #https://stackoverflow.com/questions/3354952/python-win32-post-a-click-event-to-a-window    
 def MAKELONG(low, high):
     return low | (high << 16)
+
+def add(p1, p2):
+    return (p1[0]+p2[0], p1[1]+p2[1])

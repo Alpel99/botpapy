@@ -8,7 +8,7 @@ import win32api, win32con
 from PIL import Image as PILImage
 from ctypes import windll
 import time
-from .helpers import parseCoordinates, is_hex, MAKELONG
+from .helpers import parseCoordinates, is_hex, MAKELONG, add
 from .config import CLICK_TIMEOUT, SYNC_MSG
 
 from .crangeTester import crangeTest
@@ -74,21 +74,24 @@ class Window():
             case "left":
                 win32buttondown = win32con.WM_LBUTTONDOWN
                 win32buttonup = win32con.WM_LBUTTONUP
+                win32msg = win32con.MK_LBUTTON
             case "right":
                 win32buttondown = win32con.WM_RBUTTONDOWN
                 win32buttonup = win32con.WM_RBUTTONUP
+                win32msg = win32con.MK_RBUTTON
             case "middle":
                 win32buttondown = win32con.WM_MBUTTONDOWN
                 win32buttonup = win32con.WM_MBUTTONUP
+                win32msg = win32con.MK_MBUTTON
             case _:
                 raise Exception("Couldn't parse mouse button, use 'left', 'right' or 'middle'", args)
 
         if not SYNC_MSG:
-            win32gui.PostMessage(self.hwnd,win32buttondown, 0, MAKELONG(x,y)) #win32con.MK_LBUTTON
+            win32gui.PostMessage(self.hwnd,win32buttondown, win32msg, MAKELONG(x,y)) #win32con.MK_LBUTTON
             time.sleep(CLICK_TIMEOUT)
             win32gui.PostMessage(self.hwnd,win32buttonup, 0, MAKELONG(x,y))
         else:
-            win32gui.SendMessage(self.hwnd,win32buttondown, 0, MAKELONG(x,y))
+            win32gui.SendMessage(self.hwnd,win32buttondown, win32msg, MAKELONG(x,y))
             time.sleep(CLICK_TIMEOUT)
             win32gui.SendMessage(self.hwnd,win32buttonup, 0, MAKELONG(x,y))
         
