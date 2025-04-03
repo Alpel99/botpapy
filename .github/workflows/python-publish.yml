@@ -27,7 +27,7 @@ jobs:
 
       - name: Build package
         run: |
-          if (Test-Path dist) { Remove-Item -Recurse -Force dist }
+          if [ -d "dist" ]; then rm -rf dist; fi
           python -m build
 
       - name: Upload built distributions
