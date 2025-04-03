@@ -115,7 +115,7 @@ def selectWindow(windows: dict):
         raise Exception("No window selected")
     
     
-def checkWindowNames(name: str, layer = 1):
+def checkWindowNames(name: str = "", layer = 1):
     handles = []
     def enumHandler(hwnd, ctx):
         if name in win32gui.GetWindowText(hwnd):
@@ -132,5 +132,5 @@ def checkWindowNames(name: str, layer = 1):
         return int(selectWindow(res),16)
 
 if __name__ == "__main__":
-    res = checkWindowNames("Skyrama_1")
+    res = checkWindowNames("Edge", 3)
     print(hex(res))

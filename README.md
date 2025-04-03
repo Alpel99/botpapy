@@ -26,11 +26,7 @@ uses win32gui -> only works on windows
     * might have bugs
     * performance might not be optimal
 
-# Dependencies
-* `pip install numpy opencv-python Pillow pywin32`
-* hope nothing is missing
-
 # Usage
-* `git submodule add -b master https://github.com/Alpel99/botpapy`
-* `git submodule init`
-* update: `git submodule update --remote`
+* `pip install botpapy`
+* follow tutorial and documentation
+* happy programming
